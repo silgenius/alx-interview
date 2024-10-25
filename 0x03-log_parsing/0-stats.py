@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+ #!/usr/bin/python3
 
 """
 a script that reads stdin line by line and computes metrics
@@ -20,8 +20,10 @@ pattern = re.compile(r"""
     \s\d{1,4}                         # Match a number (1 to 4 digits)
 """, re.VERBOSE)
 
-test_string = input()
-match = pattern.match(test_string)
+
+while (True):
+    test_string = input()
+    match = pattern.match(test_string)
 
 if match:
     print("okay")
