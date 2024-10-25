@@ -17,13 +17,14 @@ pattern = r'(\d{1,3}\.){3}\d{1,3} - \[\d{4}(-\d{2}){2} (\d{2}:){2}\d{2}\.\d{6}\]
 def print_stats(total_size, stats):
     print(f'File size: {total_size}')
     for key, value in stats.items():
-        print(f'{key}: {value}')
+        if not value == 0:
+            print(f'{key}: {value}')
 
 
 def print_metrics():
     count = 0
     total_size = 0
-    stats = {}
+    stats = {200: 0, 301: 0, 400: 0, 401: 0, 403: 0, 404: 0, 405: 0, 500: 0}
 
     try:
         for line in sys.stdin:
@@ -41,10 +42,7 @@ def print_metrics():
                 file_size = re.search(check, line)
                 file_size = file_size.group()
 
-                if not stats.get(status_code):
-                    stats[status_code] = 1
-                else:
-                    stats[status_code] += 1
+                stats[status_code] += 1
 
                 count += 1
                 total_size += int(file_size)
