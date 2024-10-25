@@ -23,35 +23,35 @@ def print_metrics():
     total_size = 0
     stats = {}
 
-try:
-    for line in sys.stdin:
-        match = re.match(pattern, line)
-        try:
-            match.group()
+    try:
+        for line in sys.stdin:
+            match = re.match(pattern, line)
+            try:
+                match.group()
 
-            # Extract status code
-            check = r'[2-5][0][0-1345]'
-            status_code = re.search(check, line)
-            status_code = int(status_code.group())
+                # Extract status code
+                check = r'[2-5][0][0-1345]'
+                status_code = re.search(check, line)
+                status_code = int(status_code.group())
 
-            # Extract File size
-            check = r'\d{1,4}'
-            file_size = re.search(check, line)
-            file_size = file_size.group()
+                # Extract File size
+                check = r'\d{1,4}'
+                file_size = re.search(check, line)
+                file_size = file_size.group()
 
-            if count < 10:
-                if not stats.get(status_code):
-                    stats[status_code] = 1
-                else:
-                    stats[status_code] += 1
-        
-            count += 1
-            total_size += int(file_size)
+                if count < 10:
+                    if not stats.get(status_code):
+                        stats[status_code] = 1
+                    else:
+                        stats[status_code] += 1
+            
+                count += 1
+                total_size += int(file_size)
 
-            if count == 9:
-                print_stats(total_size, stats)
-                count = 0
-        except AttributeError:
-            pass
-except KeyboardInterrupt:
-    print_stats(total_size, stats)
+                if count == 9:
+                    print_stats(total_size, stats)
+                    count = 0
+            except AttributeError:
+                pass
+    except KeyboardInterrupt:
+        print_stats(total_size, stats)
