@@ -4,53 +4,55 @@
 a script that reads stdin line by line and computes metrics
 """
 
-import re
-import signal
 import sys
 import re
-import signal
-import os
+from collections import defaultdict
 
 
-def print_stats(total_size, stats):
-    print(f'File size: {total_size}')
-    for key, value in stats.items():
-        if not value == 0:
-            print(f'{key}: {value}')
+# Regular expression to match the input line format
+log_pattern = r'(\d{1,3}\.){3}\d{1,3} - \[\d{4}(-\d{2}){2} (\d{2}:){2}\d{2}\.\d{6}\] "GET /projects/260 HTTP/1.1" [2-5][0][0-1345] \d{1,4}'
 
+def main():
+    total_size = 0
+    status_count = defaultdict(int)
+    line_count = 0
 
+    try:
+        for line in sys.stdin:
+            #line = line.strip()
+            match = re.match(log_pattern, line)
 
-pattern = r'(\d{1,3}\.){3}\d{1,3} - \[\d{4}(-\d{2}){2} (\d{2}:){2}\d{2}\.\d{6}\] "GET /projects/260 HTTP/1.1" [2-5][0][0-1345] \d{1,4}'
-count = 0
-total_size = 0
-stats = {200: 0, 301: 0, 400: 0, 401: 0, 403: 0, 404: 0, 405: 0, 500: 0}
+            if match.group():
+                # Extract status code and file size
+                check = r'[2-5][0][0-1345]'
+                status_code = re.search(check, line)
+                status_code = int(status_code.group())
 
-try:
-    for line in sys.stdin:
-        match = re.match(pattern, line)
-        try:
-            match.group()
+                check = r'\d{1,4}'
+                file_size = re.search(check, line)
+                file_size = int(file_size.group())
 
-            # Extract status code
-            check = r'[2-5][0][0-1345]'
-            status_code = re.search(check, line)
-            status_code = int(status_code.group())
+                # Update metrics
+                total_size += file_size
+                status_count[status_code] += 1
+                line_count += 1
 
-            # Extract File size
-            check = r'\d{1,4}'
-            file_size = re.search(check, line)
-            file_size = file_size.group()
+                # Print metrics after every 10 lines
+                if line_count >= 10:
+                    print_metrics(total_size, status_count)
+                    line_count = 0  # Reset line count
 
-            stats[status_code] += 1
+        # Print metrics for any remaining lines
+        if line_count > 0:
+            print_metrics(total_size, status_count)
 
-            count += 1
-            total_size += int(file_size)
+    except KeyboardInterrupt:
+        print_metrics(total_size, status_count)
 
-            if count == 10:
-                print_stats(total_size, stats)
-                count = 0
-        except Exception:
-            pass
-except KeyboardInterrupt:
-    print_stats(total_size, stats)
+def print_metrics(total_size, status_count):
+    print(f"File size: {total_size}")
+    for status_code in sorted(status_count.keys()):
+        print(f"{status_code}: {status_count[status_code]}")
 
+if __name__ == "__main__":
+    main()
