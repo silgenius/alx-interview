@@ -11,6 +11,6 @@ def validUTF8(data):
     """
 
     for item in data:
-        if item >= 127:
+        if item > 127:
             return False
     return True
