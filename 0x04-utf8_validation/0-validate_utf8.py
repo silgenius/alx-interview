@@ -4,6 +4,7 @@
 a module that contains validUTF8(data)
 """
 
+
 def validUTF8(data):
     """
     a method that determines if a given data set
@@ -22,7 +23,7 @@ def validUTF8(data):
                 num_byte = 1
             elif (byte >> 4) == 0b1110:
                 num_byte = 2
-            elif (byte >> 3) ==  0b11110:
+            elif (byte >> 3) == 0b11110:
                 num_byte = 3
             else:
                 return False
