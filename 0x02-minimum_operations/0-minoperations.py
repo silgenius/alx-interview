@@ -19,32 +19,17 @@ def minOperations(n: int) -> int:
     if n <= 1:
         return 0
 
-    num_of_H = 1
-    num_of_operation = 0
-    factors = []
+    factor = 2
+    operations = 0
 
-    for i in range(2, int((n ** 0.5)) + 1):
-        if n % i == 0:
-            factors.append(i)
+    while factor * factor <= n:
+        while n % factor == 0:
+            operations += factor
+            n //= factor
+        factor += 1
 
-    if factors:
-        a = factors[-1]  # i is a factor of n
-    else:
-        a = n
+    # N is a prime number
+    if n > 1:
+        operations += n
 
-    b = n // a
-    copy = num_of_H
-    num_of_operation += 1
-
-    if num_of_H != a:
-        # Pasting
-        num_of_H *= a
-        num_of_operation += (num_of_H - 1)
-
-        if n != num_of_H:
-            copy = num_of_H
-            num_of_operation += 1
-            # Paste what is in copy
-            num_of_H += copy * (b - 1)
-            num_of_operation += (b - 1)
-    return num_of_operation
+    return operations
