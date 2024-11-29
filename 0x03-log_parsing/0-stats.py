@@ -27,17 +27,15 @@ try:
         match = re.match(pattern, line)
         try:
             match.group()
+            # Extract HTTP query
+            query = re.search(r'"\w+ [^"]+" \d+ (\d+)', line)
+            query = query.group()
+            data = query.split()
 
-            # Extract status code
-            check = r'[2-5][0][0-1345]'
-            status_code = re.search(check, line)
-            status_code = int(status_code.group())
+            status_code = data[-2]
+            file_size = data[-1]
 
-            # Extract File size
-            check = r'\d{1,4}'
-            file_size = re.search(check, line)
-            file_size = file_size.group()
-
+            status_code = int(status_code)
             stats[status_code] += 1
 
             count += 1
@@ -46,7 +44,7 @@ try:
             if count == 10:
                 print_metrics(total_size, stats)
                 count = 0
-        except Exception:
+        except Exception as e:
             pass
 except KeyboardInterrupt:
     print_metrics(total_size, stats)
