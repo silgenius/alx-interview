@@ -18,21 +18,10 @@ def pascal_triangle(n):
     if n <= 0:
         return []
     tri = []
-
-    tri.append([1])
-    if n == 1:
-        return tri
-
-    tri.append([1, 1])
-    if n == 2:
-        return tri
-
-    for i in range(3, n + 1):
-        x = [float('inf')] * i
-        x[0] = 1
-        x[-1] = 1
-        for j in range(len(tri[i - 2]) - 1):
-            x[j + 1] = tri[i - 2][j] + tri[i - 2][j + 1]
+    
+    for i in range(n):
+        x = [1] * (i + 1)
+        for j in range(1, i):
+            x[j] = tri[i - 1][j - 1] + tri[i - 1][j]
         tri.append(x)
-        x = []
     return tri
