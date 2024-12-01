@@ -23,20 +23,21 @@ try:
     for line in sys.stdin:
         # Extract HTTP query
         query = re.search(r'"\w+ [^"]+" \d+ (\d+)', line)
-        query = query.group()
-        data = query.split()
+        if query:
+            query = query.group()
+            data = query.split()
 
-        status_code = data[-2]
-        file_size = data[-1]
+            status_code = data[-2]
+            file_size = data[-1]
 
-        status_code = int(status_code)
-        stats[status_code] += 1
+            status_code = int(status_code)
+            stats[status_code] += 1
 
-        count += 1
-        total_size += int(file_size)
+            count += 1
+            total_size += int(file_size)
 
-        if count % 10 == 0:
-            print_metrics(total_size, stats)
+            if count % 10 == 0:
+                print_metrics(total_size, stats)
     print_metrics(total_size, stats)
 except KeyboardInterrupt:
     print_metrics(total_size, stats)
