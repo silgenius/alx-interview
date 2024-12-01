@@ -41,11 +41,11 @@ try:
             count += 1
             total_size += int(file_size)
 
-            if count == 10:
+            if count % 10 == 0:
                 print_metrics(total_size, stats)
-                count = 0
         except Exception as e:
             pass
+    print_metrics(total_size, stats)
 except KeyboardInterrupt:
     print_metrics(total_size, stats)
 
