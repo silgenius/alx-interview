@@ -38,6 +38,11 @@ try:
 
             if count % 10 == 0:
                 print_metrics(total_size, stats)
+        else:
+            query = re.search(r'(\d{3})\s*$', text)
+            if query:
+                total_size += int(file_size)
+
     print_metrics(total_size, stats)
 except KeyboardInterrupt:
     print_metrics(total_size, stats)
