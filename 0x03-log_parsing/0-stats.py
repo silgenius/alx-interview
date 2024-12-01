@@ -43,6 +43,7 @@ try:
 
             if count % 10 == 0:
                 print_metrics(total_size, stats)
+
         except Exception:
             pass
     print_metrics(total_size, stats)
