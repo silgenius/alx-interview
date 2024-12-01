@@ -6,7 +6,6 @@ a script that reads stdin line by line and computes metrics
 
 import re
 import sys
-import os
 
 
 def print_metrics(total_size, stats):
@@ -16,8 +15,9 @@ def print_metrics(total_size, stats):
             print(f'{key}: {value}')
 
 
+pattern = r'(\d{1,3}\.){3}\d{1,3} - \[\d{4}(-\d{2}){2} \
+(\d{2}:){2}\d{2}\.\d{6}\] "GET /projects/260 HTTP/1.1" [2-5][0][0-1345] \d{1,4}'
 
-pattern = r'(\d{1,3}\.){3}\d{1,3} - \[\d{4}(-\d{2}){2} (\d{2}:){2}\d{2}\.\d{6}\] "GET /projects/260 HTTP/1.1" [2-5][0][0-1345] \d{1,4}'
 count = 0
 total_size = 0
 stats = {200: 0, 301: 0, 400: 0, 401: 0, 403: 0, 404: 0, 405: 0, 500: 0}
