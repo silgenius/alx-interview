@@ -6,12 +6,6 @@ that returns the perimeter of the island
 """
 
 
-def helper_cell(cell):
-    if not cell:
-        return 1
-    return 0
-
-
 def island_perimeter(grid) -> int:
     """a function called that calculates the perimeter
     of an island in a rectangular grid
