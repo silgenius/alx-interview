@@ -39,8 +39,10 @@ try:
             if count % 10 == 0:
                 print_metrics(total_size, stats)
         else:
-            query = re.search(r'(\d{3})\s*$', text)
+            # Check if file size if exist in line
+            query = re.search(r'(\d{3})\s*$', line)
             if query:
+                file_size = query.group(1)
                 total_size += int(file_size)
 
     print_metrics(total_size, stats)
